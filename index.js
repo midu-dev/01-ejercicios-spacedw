@@ -30,7 +30,8 @@ async function readFileAndCount(word, callback) {
         if (err) {
           callback(err);
         } else {
-          const count = data.split(word).length - 1;
+          // const count = data.split(word).length - 1;
+          const count = (data.match(new RegExp(word, 'g')) ?? []).length;
           callback(null, count);
         }
       });
