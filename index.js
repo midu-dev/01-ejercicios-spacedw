@@ -11,32 +11,19 @@ async function writeFile (filePath, data, callback) {
   fs.mkdirSync(dirPath, { recursive: true });
   fs.writeFile(filePath, data, callback);
 }
-
 // Ejercicio 3
 async function readFileAndCount(word, callback) {
   const argv = process.argv[2];
-
-  if (!argv) {
-    callback(new Error(LIST_ERRORS.NO_PATH));
-  } else if (!word) {
-    callback(new Error(LIST_ERRORS.NO_WORD));
-  } else {
-    const existFilePath = await fs.existsSync(argv);
-
-    if (!existFilePath) {
-      callback(null, 0);
-    } else {
-      fs.readFile(argv, 'utf8', (err, data) => {
-        if (err) {
-          callback(err);
-        } else {
-          // const count = data.split(word).length - 1;
-          const count = (data.match(new RegExp(word, 'g')) ?? []).length;
-          callback(null, count);
-        }
-      });
-    }
-  }
+  if (!argv) return callback(new Error(LIST_ERRORS.NO_PATH)); // r: No se ha especificado el path del archivo
+  if (!word) return callback(new Error(LIST_ERRORS.NO_WORD)); // r: No se ha especificado la palabra a buscar
+  fs.exists(argv, (existFilePath) => {
+    if (!existFilePath) return callback(null, 0); // r: El archivo no existe
+    fs.readFile(argv, 'utf8', (err, data) => {
+      if (err) return callback(err);
+      const count = (data.match(new RegExp(word, 'g')) ?? []).length; // Otra forma de hacerlo: data.split(word).length - 1;
+      callback(null, count);
+    });
+  });
 }
 
 module.exports = {
