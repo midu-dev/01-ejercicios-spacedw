@@ -1,7 +1,6 @@
 const fs = require('node:fs/promises')
 const path = require('node:path')
 
-const NO_FILE = 'ENOENT'
 const LIST_ERRORS = {
   NO_PATH: 'No se ha especificado el path del archivo',
   NO_WORD: 'No se ha especificado la palabra a buscar',
@@ -11,6 +10,7 @@ const LIST_ERRORS = {
 async function writeFile(filePath, data, callback) {
   try {
     const dirPath = path.dirname(filePath)
+
     await fs.mkdir(dirPath, {recursive: true});
     await fs.writeFile(filePath, data);
     callback(null);
@@ -33,20 +33,14 @@ async function readFileAndCount(word, callback) {
   }
 
   try {
-    await fs.access(argv);
     const data = await fs.readFile(argv, 'utf8');
     const searchWord = data.match(new RegExp(word, 'g')) ?? [];
     const count = searchWord.length;
     callback(null, count);
   } catch (err) {
-    if (err.code === NO_FILE) {
-      callback(null, 0); // El archivo no existe
-    } else {
-      callback(err);
-    }
+    callback(null, 0);
   }
 }
-
 
 module.exports = {
   writeFile,
