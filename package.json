@@ -1,0 +1,19 @@
+{
+  "name": "ejercicios-nodejs",
+  "version": "1.0.0",
+  "description": "nodejs exercises",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "keywords": [
+    "modejs",
+    "spacedw",
+    "space"
+  ],
+  "author": "Frank Arias",
+  "license": "ISC"
+}
